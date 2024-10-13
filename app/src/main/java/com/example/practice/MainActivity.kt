@@ -26,7 +26,7 @@ class LoginActivity : AppCompatActivity() {
 
             // Initialize views
             titleTextView = findViewById(R.id.titleTextView)
-            usernameEditText = findViewById(R.id.usernameEditText)
+            usernameEditText = findViewById(R.id.email)
             passwordEditText = findViewById(R.id.passwordEditText)
             loginButton = findViewById(R.id.loginButton)
             forgotPasswordTextView = findViewById(R.id.forgotPasswordTextView)
@@ -43,7 +43,8 @@ class LoginActivity : AppCompatActivity() {
             val password = passwordEditText.text.toString().trim()
 
             if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Please enter both username and password", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please enter both username and password", Toast.LENGTH_SHORT)
+                    .show()
                 return
             }
 
@@ -62,3 +63,4 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(this, "Sign up clicked", Toast.LENGTH_SHORT).show()
         }
     }
+}
