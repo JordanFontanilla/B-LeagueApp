@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/baseline_home_24"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/games"
+        android:icon="@drawable/baseline_live_tv_24"
+        android:title="Games" />
+
+    <!-- Placeholder item for center FAB -->
+    <item
+        android:id="@+id/placeholder"
+        android:title=""
+        android:enabled="false" />
+
+    <item
+        android:id="@+id/skills"
+        android:icon="@drawable/baseline_sports_basketball_24"
+        android:title="Skills" />
+
+    <item
+        android:id="@+id/schedule"
+        android:icon="@drawable/baseline_calendar_month_24"
+        android:title="Schedule" />
+</menu>
