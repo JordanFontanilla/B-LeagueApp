@@ -4,34 +4,44 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class homePage : AppCompatActivity() {  // Changed class name to follow Kotlin naming conventions
+class HomeFragment : Fragment() {
 
     private lateinit var profileImage: ImageView
     private lateinit var editButton: ImageView
     private lateinit var backButton: ImageView
     private lateinit var burgerMenu: ImageView
     private lateinit var bottomNavigationView: BottomNavigationView
-    private lateinit var fab: FloatingActionButton  // Added FAB
+    private lateinit var fab: FloatingActionButton
 
     private lateinit var galleryLauncher: ActivityResultLauncher<String>
     private var selectedImageUri: Uri? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home_page)  // Changed to match your layout file name
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_home, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         // Initialize views
-        initializeViews()
+        initializeViews(view)
 
         // Setup gallery launcher
         setupGalleryLauncher()
@@ -43,30 +53,34 @@ class homePage : AppCompatActivity() {  // Changed class name to follow Kotlin n
         setupBottomNavigation()
     }
 
-    private fun initializeViews() {
+    private fun initializeViews(view: View) {
         try {
-            profileImage = findViewById(R.id.profileImage)
-            editButton = findViewById(R.id.penCustomize)
-            backButton = findViewById(R.id.backButton)
-            burgerMenu = findViewById(R.id.burgerHome)
-            bottomNavigationView = findViewById(R.id.bottomNavigationView)
-            fab = findViewById(R.id.fab)  // Initialize FAB
+            profileImage = view.findViewById(R.id.profileImage)
+            editButton = view.findViewById(R.id.penCustomize)
+            backButton = view.findViewById(R.id.backButton)
+            burgerMenu = view.findViewById(R.id.burgerHome)
+            bottomNavigationView = requireActivity().findViewById(R.id.bottomNavigationView)
+            fab = requireActivity().findViewById(R.id.fab)
         } catch (e: Exception) {
             e.printStackTrace()
-            Toast.makeText(this, "Error initializing views", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Error initializing views", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun setupClickListeners() {
         editButton.setOnClickListener { checkGalleryPermission() }
-        backButton.setOnClickListener { finish() }
+        backButton.setOnClickListener {
+            // Instead of finish(), pop back stack or handle fragment navigation
+            requireActivity().supportFragmentManager.popBackStack()
+        }
         burgerMenu.setOnClickListener {
             // TODO: Implement menu functionality
+            Toast.makeText(requireContext(), "Menu clicked", Toast.LENGTH_SHORT).show()
         }
 
         fab.setOnClickListener {
             // Handle FAB click
-            Toast.makeText(this, "Add new item", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Add new item", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -74,19 +88,25 @@ class homePage : AppCompatActivity() {  // Changed class name to follow Kotlin n
         bottomNavigationView.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.home -> {
-                    Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show()
+                    // Already in Home fragment, do nothing
                     true
                 }
                 R.id.games -> {
-                    Toast.makeText(this, "Games", Toast.LENGTH_SHORT).show()
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frame_layout, GamesFragment())
+                        .commit()
                     true
                 }
                 R.id.skills -> {
-                    Toast.makeText(this, "Skills", Toast.LENGTH_SHORT).show()
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frame_layout, SkillsFragment())
+                        .commit()
                     true
                 }
                 R.id.schedule -> {
-                    Toast.makeText(this,"Schedule" , Toast.LENGTH_SHORT).show()
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frame_layout, ScheduleFragment())
+                        .commit()
                     true
                 }
                 else -> false
@@ -104,7 +124,7 @@ class homePage : AppCompatActivity() {  // Changed class name to follow Kotlin n
             uri?.let {
                 selectedImageUri = it
                 profileImage.setImageURI(it)
-                Toast.makeText(this, "Profile picture updated", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Profile picture updated", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -112,13 +132,13 @@ class homePage : AppCompatActivity() {  // Changed class name to follow Kotlin n
     private fun checkGalleryPermission() {
         when {
             ContextCompat.checkSelfPermission(
-                this,
+                requireContext(),
                 Manifest.permission.READ_EXTERNAL_STORAGE
             ) == PackageManager.PERMISSION_GRANTED -> {
                 openGallery()
             }
             shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE) -> {
-                Toast.makeText(this, "Storage permission is required to select a profile picture", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "Storage permission is required to select a profile picture", Toast.LENGTH_LONG).show()
                 requestStoragePermission()
             }
             else -> {
@@ -128,8 +148,7 @@ class homePage : AppCompatActivity() {  // Changed class name to follow Kotlin n
     }
 
     private fun requestStoragePermission() {
-        ActivityCompat.requestPermissions(
-            this,
+        requestPermissions(
             arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
             STORAGE_PERMISSION_CODE
         )
@@ -150,7 +169,7 @@ class homePage : AppCompatActivity() {  // Changed class name to follow Kotlin n
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     openGallery()
                 } else {
-                    Toast.makeText(this, "Permission denied. Cannot select profile picture.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Permission denied. Cannot select profile picture.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -158,5 +177,9 @@ class homePage : AppCompatActivity() {  // Changed class name to follow Kotlin n
 
     companion object {
         private const val STORAGE_PERMISSION_CODE = 1001
+
+        fun newInstance(): HomeFragment {
+            return HomeFragment()
+        }
     }
 }

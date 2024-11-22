@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "913357257007",
+    "project_id": "b-league-a3d6f",
+    "storage_bucket": "b-league-a3d6f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913357257007:android:8658556ddf0198f95f89da",
+        "android_client_info": {
+          "package_name": "com.example.practice"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDduG3dlcWmH3YIWZGrxv_gEKRvnuuMuQo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

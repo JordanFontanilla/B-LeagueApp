@@ -1,116 +1,77 @@
-package com.example.practice
-
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
-import java.text.SimpleDateFormat
-import java.util.*
+import android.widget.AutoCompleteTextView
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Button
+import com.example.practice.R
+import java.util.Calendar
 
 class RegistrationActivity : AppCompatActivity() {
 
-    private lateinit var heightInput: TextInputEditText
-    private lateinit var weightInput: TextInputEditText
-    private lateinit var birthdayInput: TextInputEditText
+    private lateinit var backButton: ImageView
+    private lateinit var titleText: TextView
+    private lateinit var heightInput: EditText
+    private lateinit var weightInput: EditText
+    private lateinit var birthdayInput: EditText
     private lateinit var skillLevelDropdown: AutoCompleteTextView
-    private lateinit var locationInput: TextInputEditText
-    private lateinit var birthdayInputLayout: TextInputLayout
-    private lateinit var locationInputLayout: TextInputLayout
+    private lateinit var locationInput: EditText
+    private lateinit var registerButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.registration)
 
-        initializeViews()
-        setupSkillLevelDropdown()
-        setupClickListeners()
-    }
-
-    private fun initializeViews() {
+        // Find views by ID
+        backButton = findViewById(R.id.backButton)
+        titleText = findViewById(R.id.titleText)
         heightInput = findViewById(R.id.heightInput)
         weightInput = findViewById(R.id.weightInput)
         birthdayInput = findViewById(R.id.birthdayInput)
         skillLevelDropdown = findViewById(R.id.skillLevelDropdown)
         locationInput = findViewById(R.id.locationInput)
-        birthdayInputLayout = findViewById(R.id.birthdayInputLayout)
-        locationInputLayout = findViewById(R.id.locationInputLayout)
+        registerButton = findViewById(R.id.registerButton)
 
-        // Setup back button
-        findViewById<android.widget.ImageView>(R.id.backButton).setOnClickListener {
-            finish()
+        // Set up back button click listener
+        backButton.setOnClickListener { finish() }
+
+        // Set up birthday input
+        val calendar = Calendar.getInstance()
+        val dateSetListener =
+            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+                calendar.set(Calendar.YEAR, year)
+                calendar.set(Calendar.MONTH, monthOfYear)
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                birthdayInput.setText(
+                    "${calendar.get(Calendar.DAY_OF_MONTH)}/${calendar.get(Calendar.MONTH) + 1}/${calendar.get(Calendar.YEAR)}"
+                )
+            }
+        birthdayInput.setOnClickListener {
+            DatePickerDialog(
+                this,
+                dateSetListener,
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            ).show()
         }
 
-        // Setup register button
-        findViewById<com.google.android.material.button.MaterialButton>(R.id.registerButton).setOnClickListener {
-            handleRegistration()
-        }
-    }
-
-    private fun setupSkillLevelDropdown() {
+        // Set up skill level dropdown
         val skillLevels = arrayOf("Beginner", "Intermediate", "Advanced", "Expert")
         val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, skillLevels)
-        skillLevelDropdown.setAdapter(adapter)
-    }
+        (skillLevelDropdown as? AutoCompleteTextView)?.setAdapter(adapter)
 
-    private fun setupClickListeners() {
-        // Birthday picker
-        birthdayInputLayout.setEndIconOnClickListener {
-            showDatePicker()
-        }
-        birthdayInput.setOnClickListener {
-            showDatePicker()
-        }
-
-        // Location picker
-        locationInputLayout.setEndIconOnClickListener {
-            // TODO: Implement location picker
-            Toast.makeText(this, "Location picker to be implemented", Toast.LENGTH_SHORT).show()
-        }
+        // Set up location input click listener
         locationInput.setOnClickListener {
-            // TODO: Implement location picker
-            Toast.makeText(this, "Location picker to be implemented", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun showDatePicker() {
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-        DatePickerDialog(
-            this,
-            { _, selectedYear, selectedMonth, selectedDay ->
-                calendar.set(selectedYear, selectedMonth, selectedDay)
-                val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-                birthdayInput.setText(dateFormat.format(calendar.time))
-            },
-            year,
-            month,
-            day
-        ).show()
-    }
-
-    private fun handleRegistration() {
-        // Validate inputs
-        val height = heightInput.text.toString()
-        val weight = weightInput.text.toString()
-        val birthday = birthdayInput.text.toString()
-        val skillLevel = skillLevelDropdown.text.toString()
-        val location = locationInput.text.toString()
-
-        if (height.isEmpty() || weight.isEmpty() || birthday.isEmpty() ||
-            skillLevel.isEmpty() || location.isEmpty()) {
-            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
-            return
+            // Implement location selection logic here
         }
 
-        // TODO: Implement actual registration logic
-        Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show()
-        finish()
+        // Set up register button click listener
+        registerButton.setOnClickListener {
+            // Implement registration logic here
+        }
     }
 }
