@@ -166,16 +166,5 @@
 
         </com.google.android.material.bottomappbar.BottomAppBar>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/games_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="Add"
-            android:src="@drawable/baseline_sports_basketball_24"
-            app:backgroundTint="@color/orange"
-            app:layout_anchor="@id/games_bottom_app_bar"
-            app:maxImageSize="24dp"
-            app:tint="@color/white" />
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </RelativeLayout>

@@ -24,7 +24,6 @@ class HomeFragment : Fragment() {
     private lateinit var backButton: ImageView
     private lateinit var burgerMenu: ImageView
     private lateinit var bottomNavigationView: BottomNavigationView
-    private lateinit var fab: FloatingActionButton
 
     private lateinit var galleryLauncher: ActivityResultLauncher<String>
     private var selectedImageUri: Uri? = null
@@ -60,7 +59,6 @@ class HomeFragment : Fragment() {
             backButton = view.findViewById(R.id.backButton)
             burgerMenu = view.findViewById(R.id.burgerHome)
             bottomNavigationView = requireActivity().findViewById(R.id.bottomNavigationView)
-            fab = requireActivity().findViewById(R.id.fab)
         } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(requireContext(), "Error initializing views", Toast.LENGTH_SHORT).show()
@@ -78,17 +76,16 @@ class HomeFragment : Fragment() {
             Toast.makeText(requireContext(), "Menu clicked", Toast.LENGTH_SHORT).show()
         }
 
-        fab.setOnClickListener {
-            // Handle FAB click
-            Toast.makeText(requireContext(), "Add new item", Toast.LENGTH_SHORT).show()
-        }
+
     }
 
     private fun setupBottomNavigation() {
         bottomNavigationView.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.home -> {
-                    // Already in Home fragment, do nothing
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frame_layout, HomeFragment())
+                        .commit()
                     true
                 }
                 R.id.games -> {
@@ -104,18 +101,21 @@ class HomeFragment : Fragment() {
                     true
                 }
                 R.id.schedule -> {
+                    // Already in Schedule fragment, do nothing
+                    true
+                }
+                R.id.gameStart -> {
                     requireActivity().supportFragmentManager.beginTransaction()
-                        .replace(R.id.frame_layout, ScheduleFragment())
+                        .replace(R.id.frame_layout, GameStartFragment())
                         .commit()
                     true
                 }
                 else -> false
             }
         }
-
-        // Set default selected item
-        bottomNavigationView.selectedItemId = R.id.home
+        // Add direct click listener for the gameStart ImageView
     }
+
 
     private fun setupGalleryLauncher() {
         galleryLauncher = registerForActivityResult(

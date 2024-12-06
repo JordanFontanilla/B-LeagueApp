@@ -1,23 +1,27 @@
 package com.example.practice
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class SkillsFragment : Fragment() {
-
+class GameStartFragment : Fragment() {
     private lateinit var backButton: ImageView
-    private lateinit var burgerMenu: ImageView
     private lateinit var bottomNavigationView: BottomNavigationView
 
-    private lateinit var skillsProgressBars: List<ProgressBar>
+    // Game Details TextViews
+    private lateinit var gameTimeText: TextView
+    private lateinit var locationText: TextView
+    private lateinit var playersValueText: TextView
+    private lateinit var spotsValueText: TextView
+    private lateinit var skillLevelValueText: TextView
+    private lateinit var positionNumberText: TextView
+    private lateinit var waitTimeText: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,7 +29,7 @@ class SkillsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.skills, container, false)
+        return inflater.inflate(R.layout.gamestart, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,9 +37,6 @@ class SkillsFragment : Fragment() {
 
         // Initialize views
         initializeViews(view)
-
-        // Setup progress views
-        setupProgressViews()
 
         // Setup click listeners
         setupClickListeners()
@@ -46,44 +47,33 @@ class SkillsFragment : Fragment() {
 
     private fun initializeViews(view: View) {
         try {
-            backButton = view.findViewById(R.id.games_back_button)
-            burgerMenu = view.findViewById(R.id.games_burger_menu)
-            bottomNavigationView = requireActivity().findViewById(R.id.games_bottom_navigation_view)
+            // Initialize navigation and menu buttons
+            backButton = view.findViewById(R.id.backButton)
 
-            // Skills ProgressBars
-            skillsProgressBars = listOf(
-                view.findViewById(R.id.dribbling_progress_bar),
-                view.findViewById(R.id.passing_progress_bar),
-                view.findViewById(R.id.defense_progress_bar),
-                view.findViewById(R.id.playmaking_progress_bar),
-                view.findViewById(R.id.shooting_progress_bar)
-            )
+            // Change this line to use view.findViewById()
+            bottomNavigationView = view.findViewById(R.id.bottomNavigationView)
+
+            // Game Details TextViews
+            gameTimeText = view.findViewById(R.id.gameTime)
+            locationText = view.findViewById(R.id.locationText)
+            playersValueText = view.findViewById(R.id.playersValue)
+            spotsValueText = view.findViewById(R.id.spotsValue)
+            skillLevelValueText = view.findViewById(R.id.skillLevelValue)
+            positionNumberText = view.findViewById(R.id.positionNumber)
+            waitTimeText = view.findViewById(R.id.waitTime)
+
         } catch (e: Exception) {
             e.printStackTrace()
-            Toast.makeText(requireContext(), "Error initializing views", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Error initializing views: " + e.message, Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun setupProgressViews() {
-        // Corresponding progress percentages
-        val progressPercentages = listOf(75, 85, 70, 80, 75)
-
-        // Set progress for each bar
-        skillsProgressBars.forEachIndexed { index, progressBar ->
-            progressBar.progress = progressPercentages[index]
-        }
-    }
 
     private fun setupClickListeners() {
         backButton.setOnClickListener {
-            // Navigate back or close fragment
             requireActivity().supportFragmentManager.popBackStack()
         }
 
-        burgerMenu.setOnClickListener {
-            // TODO: Implement burger menu functionality
-            Toast.makeText(requireContext(), "Menu clicked", Toast.LENGTH_SHORT).show()
-        }
 
     }
 
@@ -124,8 +114,8 @@ class SkillsFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(): SkillsFragment {
-            return SkillsFragment()
+        fun newInstance(): GameStartFragment {
+            return GameStartFragment()
         }
     }
 }

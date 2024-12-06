@@ -15,7 +15,6 @@ class GamesFragment : Fragment() {
     private lateinit var backButton: ImageView
     private lateinit var burgerMenu: ImageView
     private lateinit var bottomNavigationView: BottomNavigationView
-    private lateinit var fab: FloatingActionButton
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,7 +43,6 @@ class GamesFragment : Fragment() {
             backButton = view.findViewById(R.id.games_back_button)
             burgerMenu = view.findViewById(R.id.games_burger_menu)
             bottomNavigationView = requireActivity().findViewById(R.id.games_bottom_navigation_view)
-            fab = requireActivity().findViewById(R.id.games_fab)
         } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(requireContext(), "Error initializing views", Toast.LENGTH_SHORT).show()
@@ -61,11 +59,6 @@ class GamesFragment : Fragment() {
             // TODO: Implement burger menu functionality
             Toast.makeText(requireContext(), "Menu clicked", Toast.LENGTH_SHORT).show()
         }
-
-        fab.setOnClickListener {
-            // Handle FAB click (e.g., add new game)
-            Toast.makeText(requireContext(), "Add new game", Toast.LENGTH_SHORT).show()
-        }
     }
 
     private fun setupBottomNavigation() {
@@ -73,12 +66,14 @@ class GamesFragment : Fragment() {
             when (menuItem.itemId) {
                 R.id.home -> {
                     requireActivity().supportFragmentManager.beginTransaction()
-                        .replace(R.id.frame_layout, ScheduleFragment())
+                        .replace(R.id.frame_layout, HomeFragment())
                         .commit()
                     true
                 }
                 R.id.games -> {
-                    // Already in Games fragment, do nothing
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frame_layout, GamesFragment())
+                        .commit()
                     true
                 }
                 R.id.skills -> {
@@ -88,8 +83,12 @@ class GamesFragment : Fragment() {
                     true
                 }
                 R.id.schedule -> {
+                    // Already in Schedule fragment, do nothing
+                    true
+                }
+                R.id.gameStart -> {
                     requireActivity().supportFragmentManager.beginTransaction()
-                        .replace(R.id.frame_layout, ScheduleFragment())
+                        .replace(R.id.frame_layout, GameStartFragment())
                         .commit()
                     true
                 }

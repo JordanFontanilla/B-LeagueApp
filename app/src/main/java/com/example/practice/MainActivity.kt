@@ -1,6 +1,7 @@
 package com.example.practice
 
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -10,7 +11,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 class MainActivity : AppCompatActivity() {
 
     private lateinit var bottomNavigationView: BottomNavigationView
-    private lateinit var fab: FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,7 +18,12 @@ class MainActivity : AppCompatActivity() {
 
         // Initialize bottomNavigationView and fab
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
-        fab = findViewById(R.id.fab)
+
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout, HomeFragment())
+                .commit()
+        }
 
         // Set default fragment
         if (savedInstanceState == null) {
@@ -29,10 +34,9 @@ class MainActivity : AppCompatActivity() {
 
         // Setup bottom navigation
         setupBottomNavigation()
-
-        // Setup FAB
-        setupFloatingActionButton()
     }
+
+
 
     private fun setupBottomNavigation() {
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
@@ -53,19 +57,20 @@ class MainActivity : AppCompatActivity() {
                     replaceFragment(ScheduleFragment())
                     true
                 }
+                R.id.gameStart -> {
+                    replaceFragment(GameStartFragment())
+                    true
+                }
+
                 else -> false
             }
         }
 
         // Ensure default selection
         bottomNavigationView.selectedItemId = R.id.home
+
     }
 
-    private fun setupFloatingActionButton() {
-        fab.setOnClickListener {
-            Toast.makeText(this, "Add new item", Toast.LENGTH_SHORT).show()
-        }
-    }
 
     private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()

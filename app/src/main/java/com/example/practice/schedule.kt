@@ -17,7 +17,6 @@ class ScheduleFragment : Fragment() {
     private lateinit var backButton: ImageView
     private lateinit var burgerMenu: ImageView
     private lateinit var bottomNavigationView: BottomNavigationView
-    private lateinit var fab: FloatingActionButton
     private lateinit var gamesAdapter: GameAdapter
     private lateinit var recyclerView: RecyclerView
 
@@ -51,7 +50,6 @@ class ScheduleFragment : Fragment() {
             backButton = view.findViewById(R.id.schedule_back_button)
             burgerMenu = view.findViewById(R.id.schedule_burger_menu)
             bottomNavigationView = requireActivity().findViewById(R.id.schedule_bottom_navigation_view)
-            fab = requireActivity().findViewById(R.id.schedule_fab)
             recyclerView = view.findViewById(R.id.schedule_games_list)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -78,10 +76,6 @@ class ScheduleFragment : Fragment() {
             Toast.makeText(requireContext(), "Menu clicked", Toast.LENGTH_SHORT).show()
         }
 
-        fab.setOnClickListener {
-            // Handle FAB click (e.g., add new schedule item)
-            Toast.makeText(requireContext(), "Add new schedule item", Toast.LENGTH_SHORT).show()
-        }
     }
 
     private fun setupBottomNavigation() {
@@ -107,6 +101,12 @@ class ScheduleFragment : Fragment() {
                 }
                 R.id.schedule -> {
                     // Already in Schedule fragment, do nothing
+                    true
+                }
+                R.id.gameStart -> {
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.frame_layout, GameStartFragment())
+                        .commit()
                     true
                 }
                 else -> false

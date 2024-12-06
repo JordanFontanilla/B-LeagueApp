@@ -294,17 +294,7 @@
 
         </com.google.android.material.bottomappbar.BottomAppBar>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="95dp"
-            android:layout_height="wrap_content"
-            android:contentDescription="Add"
-            android:src="@drawable/baseline_sports_basketball_24"
-            app:backgroundTint="@color/orange"
-            app:layout_anchor="@+id/bottomAppBar"
-            app:layout_anchorGravity="center"
-            app:maxImageSize="24dp"
-            app:tint="@color/white" />
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
